@@ -90,13 +90,13 @@ probes:
 # -- Database (external PostgreSQL)
 database:
   # Provide either `url` OR individual fields (host, port, etc.)
-  url: ""
-  host: "postgresql"
+  url: "postgresql://owly:owlypass123@postgres:5432/owly?schema=public&sslmode=disable"
+  host: "postgres"
   port: 5432
   name: "owly"
-  user: "postgres"
-  password: "postgres"
-  sslMode: "prefer"
+  user: "owly"
+  password: "owlypass123"
+  sslMode: "disable"
 
 # -- Application config (non-sensitive)
 config:
@@ -109,7 +109,7 @@ secrets:
   # Use existingSecret to reference a pre-created K8s Secret
   existingSecret: ""
   # Only used when existingSecret is empty:
-  jwtSecret: ""
+  jwtSecret: "owly-eu-cra-compliant-jwt-secret-key-32chars"
   openaiApiKey: ""
   twilioAccountSid: ""
   twilioAuthToken: ""
