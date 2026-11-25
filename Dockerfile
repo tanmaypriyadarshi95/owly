@@ -8,6 +8,9 @@ RUN npm ci
 
 COPY . .
 
+ENV JWT_SECRET="cra-build-jwt-placeholder-secret-xyz123"
+ENV NEXT_TELEMETRY_DISABLED=1
+
 RUN npx prisma generate
 RUN npm run build
 
