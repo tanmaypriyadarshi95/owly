@@ -3,7 +3,7 @@
 replicaCount: 1
 
 image:
-  repository: pkg.harness.io/yzuznduxmjetoda3ys00ot/eu_cra_harness_registry/owly
+  repository: ghcr.io/tanmaypriyadarshi95/owly
   pullPolicy: IfNotPresent
   tag: ""  # Defaults to Chart.AppVersion
 
