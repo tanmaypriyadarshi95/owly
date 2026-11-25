@@ -13,48 +13,62 @@ import {
 } from "lucide-react";
 import { formatRelativeTime, getChannelLabel, getStatusColor } from "@/lib/utils";
 
+export const dynamic = "force-dynamic";
+
 async function getStats() {
-  const [
-    totalConversations,
-    activeConversations,
-    totalTickets,
-    openTickets,
-    totalMessages,
-    recentConversations,
-  ] = await Promise.all([
-    prisma.conversation.count(),
-    prisma.conversation.count({ where: { status: "active" } }),
-    prisma.ticket.count(),
-    prisma.ticket.count({ where: { status: "open" } }),
-    prisma.message.count(),
-    prisma.conversation.findMany({
-      take: 10,
-      orderBy: { updatedAt: "desc" },
-      include: {
-        messages: { take: 1, orderBy: { createdAt: "desc" } },
-        _count: { select: { messages: true } },
-      },
-    }),
-  ]);
+  try {
+    const [
+      totalConversations,
+      activeConversations,
+      totalTickets,
+      openTickets,
+      totalMessages,
+      recentConversations,
+    ] = await Promise.all([
+      prisma.conversation.count(),
+      prisma.conversation.count({ where: { status: "active" } }),
+      prisma.ticket.count(),
+      prisma.ticket.count({ where: { status: "open" } }),
+      prisma.message.count(),
+      prisma.conversation.findMany({
+        take: 10,
+        orderBy: { updatedAt: "desc" },
+        include: {
+          messages: { take: 1, orderBy: { createdAt: "desc" } },
+          _count: { select: { messages: true } },
+        },
+      }),
+    ]);
 
-  const resolvedConversations = await prisma.conversation.count({
-    where: { status: "resolved" },
-  });
+    const resolvedConversations = await prisma.conversation.count({
+      where: { status: "resolved" },
+    });
 
-  const resolutionRate =
-    totalConversations > 0
-      ? Math.round((resolvedConversations / totalConversations) * 100)
-      : 0;
+    const resolutionRate =
+      totalConversations > 0
+        ? Math.round((resolvedConversations / totalConversations) * 100)
+        : 0;
 
-  return {
-    totalConversations,
-    activeConversations,
-    totalTickets,
-    openTickets,
-    totalMessages,
-    resolutionRate,
-    recentConversations,
-  };
+    return {
+      totalConversations,
+      activeConversations,
+      totalTickets,
+      openTickets,
+      totalMessages,
+      resolutionRate,
+      recentConversations,
+    };
+  } catch (error) {
+    return {
+      totalConversations: 0,
+      activeConversations: 0,
+      totalTickets: 0,
+      openTickets: 0,
+      totalMessages: 0,
+      resolutionRate: 0,
+      recentConversations: [],
+    };
+  }
 }
 
 const channelIcons: Record<string, React.ElementType> = {
