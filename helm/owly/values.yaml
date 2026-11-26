@@ -4,7 +4,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/tanmaypriyadarshi95/owly
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   tag: ""  # Defaults to Chart.AppVersion
 
 imagePullSecrets: []
